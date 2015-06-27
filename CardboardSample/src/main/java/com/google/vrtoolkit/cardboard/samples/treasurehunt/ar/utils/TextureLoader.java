@@ -12,7 +12,9 @@ import android.opengl.GLUtils;
 public class TextureLoader {
 
 
-    /**加载一个纹理
+    /**
+     * 加载一个纹理
+     *
      * @param context
      * @param resourceId
      * @return 纹理id
@@ -29,13 +31,11 @@ public class TextureLoader {
 
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
 
-//            TODO 若出现放大或缩小导致贴图显示马赛克或大量锯齿，修改filter为mip相关过滤器
-
             GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER,
-                    GLES20.GL_NEAREST);
+                    GLES20.GL_LINEAR);
 
             GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER,
-                    GLES20.GL_NEAREST);
+                    GLES20.GL_LINEAR);
 
             GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
 

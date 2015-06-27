@@ -14,6 +14,9 @@ public class TextureDataManager {
 
     };
 
+    /**
+     * @return 头像边框strip顺序倒置纹理映射
+     */
     public static float[] getAvatarBorderData() {
         return mAvatarBorderData.clone();
     }
