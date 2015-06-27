@@ -30,7 +30,8 @@ import com.google.vrtoolkit.cardboard.CardboardView;
 import com.google.vrtoolkit.cardboard.Eye;
 import com.google.vrtoolkit.cardboard.HeadTransform;
 import com.google.vrtoolkit.cardboard.Viewport;
-import com.google.vrtoolkit.cardboard.samples.treasurehunt.utils.ShaderManager;
+import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.FovBackground;
+import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.utils.ShaderManager;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

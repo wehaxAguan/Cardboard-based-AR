@@ -1,4 +1,4 @@
-package com.google.vrtoolkit.cardboard.samples.treasurehunt;
+package com.google.vrtoolkit.cardboard.samples.treasurehunt.ar;
 
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
@@ -7,7 +7,7 @@ import android.opengl.Matrix;
 import android.util.Log;
 
 import com.google.vrtoolkit.cardboard.ScreenParams;
-import com.google.vrtoolkit.cardboard.samples.treasurehunt.utils.GlHelper;
+import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.utils.GlHelper;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

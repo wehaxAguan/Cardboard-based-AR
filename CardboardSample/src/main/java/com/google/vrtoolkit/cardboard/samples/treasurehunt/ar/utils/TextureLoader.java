@@ -1,4 +1,4 @@
-package com.google.vrtoolkit.cardboard.samples.treasurehunt.utils;
+package com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;

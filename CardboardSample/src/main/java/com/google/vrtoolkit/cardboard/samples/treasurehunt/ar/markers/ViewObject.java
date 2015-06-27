@@ -1,8 +1,8 @@
-package com.google.vrtoolkit.cardboard.samples.treasurehunt.markers;
+package com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.markers;
 
 import android.opengl.GLES20;
 
-import com.google.vrtoolkit.cardboard.samples.treasurehunt.utils.GlHelper;
+import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.utils.GlHelper;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -14,12 +14,12 @@ import java.nio.FloatBuffer;
 public class ViewObject {
 
     /**
-     * 绘制图形时，每个顶点xyz三个坐标
+     * 绘制图形时，每个顶点xyz三分坐标
      */
     public static int COORDS_PER_VERTEX_3D = 3;
 
     /**
-     * 纹理映射时，每个顶点对应贴图的uv两个坐标
+     * 纹理映射时，每个顶点对应贴图的uv两分坐标
      */
     public static int COORDS_PER_VERTEX_UV = 2;
 
@@ -30,10 +30,9 @@ public class ViewObject {
     float[] mvpMatrix = new float[16];
 
     int program;
-    int positionLocation;
-    int textureCoord;
-    int texture;
-    int uTexture;
+    int positionHandle;
+    int textureCoordHandle;
+    int textureHandle;
 
     FloatBuffer vertexBuffer;
     FloatBuffer textureBuffer;
@@ -46,8 +45,8 @@ public class ViewObject {
         GLES20.glLinkProgram(program);
         GLES20.glUseProgram(program);
         GlHelper.checkGlError(this.getClass().getName());
-        GLES20.glGetAttribLocation(textureCoord, "aTextureCoord");
-        GLES20.glGetAttribLocation(uTexture, "uTexture");
+        textureCoordHandle = GLES20.glGetAttribLocation(program, "aTextureCoord");
+        positionHandle = GLES20.glGetAttribLocation(program, "aPosition");
     }
 
 
@@ -61,7 +60,7 @@ public class ViewObject {
     }
 
     public void putTexture(int texture, float[] textureCoordData) {
-        this.texture = texture;
+        this.textureHandle = texture;
         textureBuffer = ByteBuffer.allocate(textureCoordData.length * 4)
                 .order(ByteOrder.nativeOrder())
                 .asFloatBuffer();
@@ -71,23 +70,19 @@ public class ViewObject {
 
 
     public void draw() {
-        if (texture == 0) {
-            return;
-        }
 
         GLES20.glUseProgram(program);
         GlHelper.checkGlError(TAG + ":glUserProgram");
 
-        GLES20.glActiveTexture(this.texture);
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture);
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle);
+        GLES20.glUniform1i(textureHandle, 0);
 
-        GLES20.glUniform1i(uTexture, 0);
+        GLES20.glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX_3D, GLES20.GL_FLOAT, false, 0, vertexBuffer);
+        GLES20.glEnableVertexAttribArray(positionHandle);
 
-        GLES20.glVertexAttribPointer(positionLocation, COORDS_PER_VERTEX_3D, GLES20.GL_FLOAT, false, 0, vertexBuffer);
-        GLES20.glEnableVertexAttribArray(positionLocation);
-
-        GLES20.glVertexAttribPointer(textureCoord, COORDS_PER_VERTEX_UV, GLES20.GL_FLOAT, false, 0, textureBuffer);
-        GLES20.glEnableVertexAttribArray(textureCoord);
+        GLES20.glVertexAttribPointer(textureCoordHandle, COORDS_PER_VERTEX_UV, GLES20.GL_FLOAT, false, 0, textureBuffer);
+        GLES20.glEnableVertexAttribArray(textureCoordHandle);
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount);
 

@@ -1,4 +1,3 @@
-#version 120
 precision mediump float;
 uniform sampler2D uTexture;
 varying vec2 vTextureCoord;

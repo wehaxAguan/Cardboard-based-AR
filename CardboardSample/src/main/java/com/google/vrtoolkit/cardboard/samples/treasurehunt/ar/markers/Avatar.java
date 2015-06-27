@@ -1,4 +1,4 @@
-package com.google.vrtoolkit.cardboard.samples.treasurehunt.markers;
+package com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.markers;
 
 /**
  * Created by mayuhan on 15/6/23.

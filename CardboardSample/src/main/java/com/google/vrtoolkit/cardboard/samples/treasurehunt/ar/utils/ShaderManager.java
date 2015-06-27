@@ -1,8 +1,10 @@
-package com.google.vrtoolkit.cardboard.samples.treasurehunt.utils;
+package com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.utils;
 
 import android.content.Context;
 import android.opengl.GLES20;
 import android.util.Log;
+
+import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.exceptions.CompileGLSLException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -47,10 +49,12 @@ public class ShaderManager {
 
             // If the compilation failed, delete the shader.
             if (compileStatus[0] == 0) {
+                String infoLog = GLES20.glGetShaderInfoLog(shader);
                 Log.e(TAG, "Error compiling shader: " + GLES20.glGetShaderInfoLog(shader));
                 GLES20.glDeleteShader(shader);
-                shader = 0;
+                throw new CompileGLSLException(infoLog);
             }
+
             if (shader == 0) {
                 throw new RuntimeException("Error creating shader.");
             } else {
