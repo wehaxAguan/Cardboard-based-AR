@@ -171,6 +171,7 @@ public class FovBackground {
                 fovCamera.setParameters(camParam);
             }
             fovCamera.startPreview();
+//            fovCamera.autoFocus();
 
 
         } catch (Exception ioe) {

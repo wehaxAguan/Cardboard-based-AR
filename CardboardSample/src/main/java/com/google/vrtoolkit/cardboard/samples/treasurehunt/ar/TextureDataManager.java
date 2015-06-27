@@ -6,10 +6,12 @@ package com.google.vrtoolkit.cardboard.samples.treasurehunt.ar;
 public class TextureDataManager {
     private static final float[] mAvatarBorderData = {
             //U ,V
-            0f, 0f,         //lb
-            1f, 0f,         //rb
-            0f, 1f,         //lt
-            1f, 1f          //rt
+            0f, 0f,                 //lt
+            0f, 1f,                 //lb
+            1f, 0f,                 //rt
+            1f, 1f,                 //rb
+
+
     };
 
     public static float[] getAvatarBorderData() {

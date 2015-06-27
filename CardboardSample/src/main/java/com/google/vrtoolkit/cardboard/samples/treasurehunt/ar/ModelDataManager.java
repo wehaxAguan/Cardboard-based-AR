@@ -7,10 +7,12 @@ public class ModelDataManager {
 
     private static final float[] mViewObjSquare = {
             // X, Y, Z,
-            -1f, -1f, 1f,       //lb
-            1f, -1f, 1f,        //rb
-            -1f, 1f, 1f,        //lt
-            1f, 1f, 1f          //rt
+            -1f, 1f, 1f,   //lt
+            -1f, -1f, 1f,   //lb
+            1f, 1f, 1f,    //rt
+            1f, -1f, 1f,    //rb
+
+
     };
 
     public static float[] getViewObjectData() {
