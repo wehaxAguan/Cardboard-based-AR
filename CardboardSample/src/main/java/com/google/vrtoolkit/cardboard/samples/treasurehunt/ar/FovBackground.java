@@ -82,6 +82,10 @@ public class FovBackground {
 
     private Camera fovCamera;
 
+
+    /**
+     * 构造场景中的模型,在onSurfaceCreated中调用
+     */
     public void bind() {
 
         mTriangleVertices = ByteBuffer.allocateDirect(
@@ -220,6 +224,8 @@ public class FovBackground {
 
         Matrix.setIdentityM(mMVPMatrix, 0);
 //        float temp[] = new float[16];
+
+        //TODO 貌似可以通过ClipMatrix优化
 
         Matrix.multiplyMM(mMVPMatrix, 0, perspective, 0, mMVPMatrix, 0);
         Matrix.scaleM(mMVPMatrix, 0, mMVPMatrix, 0, scaleX, scaleY, 1f);

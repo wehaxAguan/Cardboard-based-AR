@@ -1,6 +1,7 @@
-package com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.markers;
+package com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.marker;
 
 import android.opengl.GLES20;
+import android.opengl.Matrix;
 
 import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.utils.GlHelper;
 
@@ -23,16 +24,21 @@ public class ViewObject {
      */
     public static int COORDS_PER_VERTEX_UV = 2;
 
+    /**
+     * 每个ViewObj都视为一个空间中的正方行，所以顶点数量为4
+     */
+    public static int VERTEX_CONT = 4;
+
     private static String TAG = "ViewObject";
-
-    private int vertexCount = 0;
-
-    float[] mvpMatrix = new float[16];
 
     int program;
     int positionHandle;
     int textureCoordHandle;
     int textureHandle;
+    int mvpMatrixHandle;
+
+    private float[] mvpMatrix = new float[16];
+    private float[] model = new float[16];
 
     FloatBuffer vertexBuffer;
     FloatBuffer textureBuffer;
@@ -47,12 +53,15 @@ public class ViewObject {
         GlHelper.checkGlError(this.getClass().getName());
         textureCoordHandle = GLES20.glGetAttribLocation(program, "aTextureCoord");
         positionHandle = GLES20.glGetAttribLocation(program, "aPosition");
+        mvpMatrixHandle = GLES20.glGetUniformLocation(program, "uMVPMatrix");
+
+        Matrix.setIdentityM(model, 0);
+        Matrix.translateM(model, 0, 0, 0, -10);
     }
 
 
     public void putVertexData(float[] vertexData) {
-        this.vertexCount = vertexData.length;
-        vertexBuffer = ByteBuffer.allocate(vertexData.length * 4)
+        vertexBuffer = ByteBuffer.allocateDirect(vertexData.length * 4)
                 .order(ByteOrder.nativeOrder())
                 .asFloatBuffer();
         vertexBuffer.put(vertexData);
@@ -61,7 +70,7 @@ public class ViewObject {
 
     public void putTexture(int texture, float[] textureCoordData) {
         this.textureHandle = texture;
-        textureBuffer = ByteBuffer.allocate(textureCoordData.length * 4)
+        textureBuffer = ByteBuffer.allocateDirect(textureCoordData.length * 4)
                 .order(ByteOrder.nativeOrder())
                 .asFloatBuffer();
         textureBuffer.put(textureCoordData);
@@ -69,7 +78,7 @@ public class ViewObject {
     }
 
 
-    public void draw() {
+    public void draw(float[] perspective, float[] view) {
 
         GLES20.glUseProgram(program);
         GlHelper.checkGlError(TAG + ":glUserProgram");
@@ -84,7 +93,17 @@ public class ViewObject {
         GLES20.glVertexAttribPointer(textureCoordHandle, COORDS_PER_VERTEX_UV, GLES20.GL_FLOAT, false, 0, textureBuffer);
         GLES20.glEnableVertexAttribArray(textureCoordHandle);
 
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount);
+
+        float[] modelView = new float[16];
+
+        Matrix.multiplyMM(modelView, 0, view, 0, model, 0);
+
+        Matrix.multiplyMM(mvpMatrix, 0, perspective, 0, modelView, 0);
+
+        GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, mvpMatrix, 0);
+
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, VERTEX_CONT);
 
     }
+
 }

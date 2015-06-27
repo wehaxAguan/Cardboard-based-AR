@@ -31,7 +31,12 @@ import com.google.vrtoolkit.cardboard.Eye;
 import com.google.vrtoolkit.cardboard.HeadTransform;
 import com.google.vrtoolkit.cardboard.Viewport;
 import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.FovBackground;
-import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.utils.ShaderManager;
+import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.ModelDataManager;
+import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.ShaderManager;
+import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.TextureDataManager;
+import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.marker.ViewObject;
+import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.utils.GlHelper;
+import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.utils.TextureLoader;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -109,6 +114,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     private FovBackground mFovBg;
     private float[] orthoM = new float[16];
+    private int viewObjVertexShader;
+    private int viewObjFragmentShader;
+    private ViewObject mViewObj;
 
 
     @Override
@@ -168,6 +176,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         overlayView = (CardboardOverlayView) findViewById(R.id.overlay);
         overlayView.show3DToast("Pull the magnet when you find an object.");
         mFovBg = new FovBackground();
+
     }
 
     @Override
@@ -202,6 +211,14 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onSurfaceCreated(EGLConfig config) {
         Log.i(TAG, "onSurfaceCreated");
         GLES20.glClearColor(0f, 0f, 0f, 0f); // Dark background so text shows up well.
+
+
+        viewObjVertexShader = ShaderManager.loadGLShader(this, GLES20.GL_VERTEX_SHADER, R.raw.texture_vertex);
+        viewObjFragmentShader = ShaderManager.loadGLShader(this, GLES20.GL_FRAGMENT_SHADER, R.raw.texture_fragment);
+
+        mViewObj = new ViewObject(viewObjVertexShader, viewObjFragmentShader);
+        mViewObj.putVertexData(ModelDataManager.getViewObjectData());
+        mViewObj.putTexture(TextureLoader.load(this, R.drawable.avatar_border_male), TextureDataManager.getAvatarBorderData());
 
         ByteBuffer bbVertices = ByteBuffer.allocateDirect(WorldLayoutData.CUBE_COORDS.length * 4);
         bbVertices.order(ByteOrder.nativeOrder());
@@ -345,8 +362,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         headTransform.getHeadView(headView, 0);
 
-        checkGlError("onReadyToDraw");
-
+        GlHelper.checkGlError("onReadyToDraw");
     }
 
     @Override
@@ -369,7 +385,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         checkGlError("colorParam");
 
-
         // Apply the eye transformation to the camera.
         Matrix.multiplyMM(view, 0, eye.getEyeView(), 0, camera, 0);
 
@@ -389,6 +404,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
                 modelView, 0);
 
         mFovBg.draw(perspective);
+
+        mViewObj.draw(perspective, view);
+
         updateCurrentData();
     }
 

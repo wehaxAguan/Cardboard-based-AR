@@ -1,6 +1,7 @@
-uniform mat4 uMVPMatrix; //带投影
+uniform mat4 uMVPMatrix;
 
 attribute vec2 aTextureCoord;
+attribute vec4 aPosition;
 varying vec2 vTextureCoord;
 
 void main() {

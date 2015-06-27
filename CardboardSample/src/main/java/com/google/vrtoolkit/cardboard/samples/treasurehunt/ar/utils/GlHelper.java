@@ -26,6 +26,10 @@ public class GlHelper {
         }
     }
 
+    public static void checkShaderError(String action, int shaderHandle) {
+        Log.d(action, GLES20.glGetShaderInfoLog(shaderHandle));
+    }
+
 
     /**
      * 新建一个管线程序对象,并链接传入的顶点和片段着色器

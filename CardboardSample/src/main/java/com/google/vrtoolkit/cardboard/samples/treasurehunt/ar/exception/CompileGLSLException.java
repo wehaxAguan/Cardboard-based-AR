@@ -1,4 +1,4 @@
-package com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.exceptions;
+package com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.exception;
 
 /**
  * Created by mayuhan on 15/6/27.
