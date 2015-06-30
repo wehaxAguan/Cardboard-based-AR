@@ -23,6 +23,8 @@ import android.opengl.Matrix;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.vrtoolkit.cardboard.CardboardActivity;
@@ -51,7 +53,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 /**
  * A Cardboard sample application.
  */
-public class MainActivity extends CardboardActivity implements CardboardView.StereoRenderer, SurfaceTexture.OnFrameAvailableListener {
+public class MainActivity extends CardboardActivity implements CardboardView.StereoRenderer, SurfaceTexture.OnFrameAvailableListener, View.OnClickListener {
 
     private static final String TAG = "MainActivity";
 
@@ -129,6 +131,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private Avatar mAvatar;
     private Status mStatus;
     private Marker mMarker;
+    private Button loadAvatarBtn;
+    private Button changeTexBtn;
 
 
     @Override
@@ -169,6 +173,10 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         setContentView(R.layout.common_ui);
         cardboardView = (CardboardView) findViewById(R.id.cardboard_view);
+        loadAvatarBtn = (Button) findViewById(R.id.load_texture_btn);
+        loadAvatarBtn.setOnClickListener(this);
+        changeTexBtn = (Button) findViewById(R.id.change_texture_btn);
+        changeTexBtn.setOnClickListener(this);
         currText = (TextView) findViewById(R.id.current_data);
 
         cardboardView.setVRModeEnabled(false);
@@ -348,12 +356,12 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         mViewObj = new Spirit();
         mViewObj.putVertexData(ModelDataManager.getSpiritVertexData());
-        mViewObj.putTexture(TextureLoader.load(this, R.drawable.avatar_border_male), TextureDataManager.getAvatarBorderData());
+        mViewObj.putTextureData(TextureLoader.load(this, R.drawable.avatar_border_male), TextureDataManager.getAvatarBorderData());
         mViewObj.moveTo(0, 0, -12);
 //
         mViewObj2 = new Spirit();
         mViewObj2.putVertexData(ModelDataManager.getSpiritVertexData());
-        mViewObj2.putTexture(TextureLoader.load(this, R.drawable.ic_launcher), TextureDataManager.getAvatarBorderData());
+        mViewObj2.putTextureData(TextureLoader.load(this, R.drawable.ic_launcher), TextureDataManager.getAvatarBorderData());
         mViewObj2.moveTo(0, 0, -12.01f);
 
         mAvatar = new Avatar();
@@ -367,7 +375,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         mMarker = new Marker();
         mMarker.bind(this);
         mMarker.moveTo(2, 1, -10);
-
 
         mFovBg.bind();
         mFovBg.setOnFrameAvailableListener(this);
@@ -449,7 +456,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 //        mViewObj.
 //        mViewObj.draw(perspective, view, textureShaderProgram);
 
-        mAvatar.draw(perspective, view, textureShaderProgram);
+//        mAvatar.draw(perspective, view, textureShaderProgram);
 //
 //        mStatus.draw(perspective, view, textureShaderProgram);
 
@@ -620,5 +627,28 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onFrameAvailable(SurfaceTexture surfaceTexture) {
         this.cardboardView.requestRender();
         mFovBg.updateTexImage();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.load_texture_btn:
+                cardboardView.queueEvent(new Runnable() {
+                    @Override
+                    public void run() {
+                        mMarker.setAvatarTexture(TextureLoader.load(MainActivity.this, R.drawable.ic_launcher));
+                    }
+                });
+
+                break;
+            case R.id.change_texture_btn:
+                cardboardView.queueEvent(new Runnable() {
+                    @Override
+                    public void run() {
+                        mMarker.setAvatarTexture(TextureLoader.load(MainActivity.this, R.drawable.status_border));
+                    }
+                });
+                break;
+        }
     }
 }

@@ -17,17 +17,17 @@ public class Status extends ViewObject {
 
     private Spirit mBorder;
     private Spirit mThumbnail;
-    private final static float LEVEL_RANGE = 0.001f;
+    private final static float LEVEL_RANGE = 0.1f;
 
     public void bind(Context context) {
 
         mBorder = new Spirit();
         mThumbnail = new Spirit();
 
-        mBorder.putTexture(TextureLoader.load(context, R.drawable.avatar_border_male), TextureDataManager.getAvatarBorderData());
+        mBorder.putTextureData(TextureLoader.load(context, R.drawable.avatar_border_male), TextureDataManager.getAvatarBorderData());
         mBorder.putVertexData(ModelDataManager.getSpiritVertexData());
 
-        mThumbnail.putTexture(TextureLoader.load(context, R.drawable.ic_launcher), TextureDataManager.getAvatarBorderData());
+        mThumbnail.putTextureData(TextureLoader.load(context, R.drawable.ic_launcher), TextureDataManager.getAvatarBorderData());
         mThumbnail.putVertexData(ModelDataManager.getSpiritVertexData());
 
     }

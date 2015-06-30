@@ -17,7 +17,7 @@ import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.utils.TextureLoade
 public class Avatar extends ViewObject {
 
     private final static String TAG = "Avatar";
-    private final static float LEVEL_RANGE = 0.001f;
+    private final static float LEVEL_RANGE = 0.1f;
     private Spirit mBorder;
     private Spirit mAvatar;
 
@@ -25,10 +25,11 @@ public class Avatar extends ViewObject {
         mBorder = new Spirit();
         mAvatar = new Spirit();
 
-        mBorder.putTexture(TextureLoader.load(context, R.drawable.avatar_border_male), TextureDataManager.getAvatarBorderData());
+        mBorder.putTextureData(TextureLoader.load(context, R.drawable.avatar_border_male), TextureDataManager.getAvatarBorderData());
         mBorder.putVertexData(ModelDataManager.getSpiritVertexData());
 
-        mAvatar.putTexture(TextureLoader.load(context, R.drawable.ic_launcher), TextureDataManager.getAvatarBorderData());
+
+        mAvatar.putTextureData(0, TextureDataManager.getAvatarBorderData());
         mAvatar.putVertexData(ModelDataManager.getSpiritVertexData());
 
     }
@@ -52,6 +53,10 @@ public class Avatar extends ViewObject {
         //有个距离差防止两个Spirit绘制到同一位置互相冲突
         mBorder.moveTo(x, y, z + LEVEL_RANGE);
 
+    }
+
+    public void setAvatarTexture(int avatarThumbHandle) {
+        mAvatar.putTexture(avatarThumbHandle);
     }
 
 }

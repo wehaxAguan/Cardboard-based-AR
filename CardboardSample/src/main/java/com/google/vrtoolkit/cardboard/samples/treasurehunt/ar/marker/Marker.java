@@ -12,7 +12,7 @@ public class Marker extends ViewObject {
 
     private Avatar mAvatar;
     private Status mStatus;
-    private final static float LEVEL_RANGE = 0.01f;
+    private final static float LEVEL_RANGE = 0.5f;
 
     public void bind(Context context) {
         mAvatar = new Avatar();
@@ -31,6 +31,10 @@ public class Marker extends ViewObject {
         mAvatar.draw(perspective, view, program);
         mStatus.draw(perspective, view, program);
 
+    }
+
+    public void setAvatarTexture(int textureHandle) {
+        mAvatar.setAvatarTexture(textureHandle);
     }
 
 }

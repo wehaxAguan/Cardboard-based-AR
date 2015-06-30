@@ -54,7 +54,7 @@ public class Spirit {
      * @param textureHandle
      * @param textureCoordData
      */
-    public void putTexture(int textureHandle, float[] textureCoordData) {
+    public void putTextureData(int textureHandle, float[] textureCoordData) {
         this.textureHandle = textureHandle;
         textureBuffer = ByteBuffer.allocateDirect(textureCoordData.length * 4)
                 .order(ByteOrder.nativeOrder())
@@ -63,8 +63,14 @@ public class Spirit {
         textureBuffer.position(0);
     }
 
+    public void putTexture(int textureHandle) {
+        this.textureHandle = textureHandle;
+    }
 
-    /** 将Spirit移动到(View变换后)世界坐标某一位置
+
+    /**
+     * 将Spirit移动到(View变换后)世界坐标某一位置
+     *
      * @param x
      * @param y
      * @param z
@@ -75,13 +81,17 @@ public class Spirit {
     }
 
 
-    /** 绘制
+    /**
+     * 绘制
+     *
      * @param perspective 透视矩阵
-     * @param view 视觉坐标矩阵
-     * @param program Spirit重用管线
+     * @param view        视觉坐标矩阵
+     * @param program     Spirit重用管线
      */
     public void draw(float[] perspective, float[] view, TextureShaderProgram program) {
-
+        if (textureHandle == 0) {
+            return;
+        }
         program.setTexture(textureHandle);
 
         vertexBuffer.position(0);
