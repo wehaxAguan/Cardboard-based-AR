@@ -4,7 +4,7 @@ import android.hardware.Camera;
 import android.opengl.GLES20;
 import android.util.Log;
 
-import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.marker.Spirit;
+import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.marker.base.Spirit;
 
 import java.util.List;
 

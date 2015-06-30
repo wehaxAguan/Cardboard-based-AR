@@ -35,7 +35,9 @@ import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.ModelDataManager;
 import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.ShaderManager;
 import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.TextureDataManager;
 import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.marker.Avatar;
-import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.marker.Spirit;
+import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.marker.Marker;
+import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.marker.Status;
+import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.marker.base.Spirit;
 import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.programs.TextureShaderProgram;
 import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.utils.GlHelper;
 import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.utils.TextureLoader;
@@ -125,6 +127,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private int avatarBorder;
     private int avatar;
     private Avatar mAvatar;
+    private Status mStatus;
+    private Marker mMarker;
 
 
     @Override
@@ -354,7 +358,16 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         mAvatar = new Avatar();
         mAvatar.bind(this);
-        mAvatar.moveTo(0, 0, -10);
+        mAvatar.moveTo(2, 0, -10.1f);
+
+        mStatus = new Status();
+        mStatus.bind(this);
+        mStatus.moveTo(3, 1, -9);
+
+        mMarker = new Marker();
+        mMarker.bind(this);
+        mMarker.moveTo(2, 1, -10);
+
 
         mFovBg.bind();
         mFovBg.setOnFrameAvailableListener(this);
@@ -437,6 +450,10 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 //        mViewObj.draw(perspective, view, textureShaderProgram);
 
         mAvatar.draw(perspective, view, textureShaderProgram);
+//
+//        mStatus.draw(perspective, view, textureShaderProgram);
+
+        mMarker.draw(perspective, view, textureShaderProgram);
 
         updateCurrentData();
     }

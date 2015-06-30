@@ -6,15 +6,18 @@ import android.util.Log;
 import com.google.vrtoolkit.cardboard.samples.treasurehunt.R;
 import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.ModelDataManager;
 import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.TextureDataManager;
+import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.marker.base.Spirit;
+import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.marker.base.ViewObject;
 import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.programs.TextureShaderProgram;
 import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.utils.TextureLoader;
 
 /**
  * Created by mayuhan on 15/6/23.
  */
-public class Avatar {
+public class Avatar extends ViewObject {
 
     private final static String TAG = "Avatar";
+    private final static float LEVEL_RANGE = 0.001f;
     private Spirit mBorder;
     private Spirit mAvatar;
 
@@ -35,6 +38,7 @@ public class Avatar {
             Log.e(TAG, "Avatar need bind onSurfaceCreated");
             return;
         }
+        //希望在底层的先绘制
         mAvatar.draw(perspective, view, program);
         mBorder.draw(perspective, view, program);
     }
@@ -45,7 +49,8 @@ public class Avatar {
             return;
         }
         mAvatar.moveTo(x, y, z);
-        mBorder.moveTo(x, y, z+0.1f);
+        //有个距离差防止两个Spirit绘制到同一位置互相冲突
+        mBorder.moveTo(x, y, z + LEVEL_RANGE);
 
     }
 
