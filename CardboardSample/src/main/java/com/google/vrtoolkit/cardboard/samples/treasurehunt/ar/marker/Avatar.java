@@ -2,18 +2,14 @@ package com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.marker;
 
 import android.content.Context;
 
-import com.google.vrtoolkit.cardboard.samples.treasurehunt.R;
-import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.ModelDataManager;
-import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.TextureDataManager;
 import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.utils.GlHelper;
-import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.utils.TextureLoader;
 
 /**
  * Created by mayuhan on 15/6/23.
  */
 public class Avatar {
-    TextureObject border;
-    TextureObject avatar;
+    Sprit border;
+    Sprit avatar;
 
     public void bind(Context context) {
 

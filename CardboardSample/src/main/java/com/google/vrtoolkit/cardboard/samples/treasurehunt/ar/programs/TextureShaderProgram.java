@@ -36,7 +36,6 @@ public class TextureShaderProgram {
 
     public void setTexture(int textureId) {
 
-
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
 
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);

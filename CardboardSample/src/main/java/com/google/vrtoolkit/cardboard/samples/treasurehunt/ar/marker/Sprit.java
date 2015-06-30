@@ -12,7 +12,7 @@ import java.nio.FloatBuffer;
 /**
  * Created by mayuhan on 15/6/24.
  */
-public class TextureObject {
+public class Sprit {
 
     /**
      * 绘制图形时，每个顶点xyz三分坐标
@@ -32,7 +32,7 @@ public class TextureObject {
 
     private FloatBuffer vertexBuffer;
     private FloatBuffer textureBuffer;
-    private TextureShaderProgram program;
+    private int textureHandle;
 
     public void putVertexData(float[] vertexData) {
         vertexBuffer = ByteBuffer.allocateDirect(vertexData.length * 4)
@@ -42,7 +42,8 @@ public class TextureObject {
         vertexBuffer.position(0);
     }
 
-    public void putTexture(float[] textureCoordData) {
+    public void putTexture(int textureHandle, float[] textureCoordData) {
+        this.textureHandle = textureHandle;
         textureBuffer = ByteBuffer.allocateDirect(textureCoordData.length * 4)
                 .order(ByteOrder.nativeOrder())
                 .asFloatBuffer();
@@ -57,6 +58,8 @@ public class TextureObject {
 
 
     public void draw(float[] perspective, float[] view, TextureShaderProgram program) {
+
+        program.setTexture(textureHandle);
 
         vertexBuffer.position(0);
         GLES20.glVertexAttribPointer(program.getVertexPositionHandle(), COORDS_PER_VERTEX_3D, GLES20.GL_FLOAT, false, 0, vertexBuffer);

@@ -4,7 +4,7 @@ import android.hardware.Camera;
 import android.opengl.GLES20;
 import android.util.Log;
 
-import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.marker.TextureObject;
+import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.marker.Sprit;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class GlHelper {
         }
     }
 
-    public static void checkObjShaderError(TextureObject textureObject, String action) {
+    public static void checkObjShaderError(Sprit sprit, String action) {
         checkGlError(action + " ready to draw");
     }
 
