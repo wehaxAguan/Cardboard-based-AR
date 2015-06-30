@@ -34,7 +34,8 @@ import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.FovBackground;
 import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.ModelDataManager;
 import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.ShaderManager;
 import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.TextureDataManager;
-import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.marker.ViewObject;
+import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.marker.TextureObject;
+import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.programs.TextureShaderProgram;
 import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.utils.GlHelper;
 import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.utils.TextureLoader;
 
@@ -116,7 +117,11 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private float[] orthoM = new float[16];
     private int viewObjVertexShader;
     private int viewObjFragmentShader;
-    private ViewObject mViewObj;
+    private TextureObject mViewObj;
+    private TextureObject mViewObj2;
+
+    private TextureShaderProgram textureShaderProgram;
+//    private Avatar mAvatar;
 
 
     @Override
@@ -176,6 +181,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         overlayView = (CardboardOverlayView) findViewById(R.id.overlay);
         overlayView.show3DToast("Pull the magnet when you find an object.");
         mFovBg = new FovBackground();
+//        mAvatar = new Avatar();
 
     }
 
@@ -213,15 +219,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         GLES20.glClearColor(0f, 0f, 0f, 0f); // Dark background so text shows up well.
 
         GLES20.glEnable(GLES20.GL_BLEND);
-        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA,GLES20.GL_ONE_MINUS_SRC_ALPHA);
+        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 
-
-        viewObjVertexShader = ShaderManager.loadGLShader(this, GLES20.GL_VERTEX_SHADER, R.raw.texture_vertex);
-        viewObjFragmentShader = ShaderManager.loadGLShader(this, GLES20.GL_FRAGMENT_SHADER, R.raw.texture_fragment);
-
-        mViewObj = new ViewObject(viewObjVertexShader, viewObjFragmentShader);
-        mViewObj.putVertexData(ModelDataManager.getViewObjectData());
-        mViewObj.putTexture(TextureLoader.load(this, R.drawable.avatar_border_male), TextureDataManager.getAvatarBorderData());
 
         ByteBuffer bbVertices = ByteBuffer.allocateDirect(WorldLayoutData.CUBE_COORDS.length * 4);
         bbVertices.order(ByteOrder.nativeOrder());
@@ -332,17 +331,34 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 
+//        viewObjVertexShader = ShaderManager.loadGLShader(this, GLES20.GL_VERTEX_SHADER, R.raw.texture_vertex);
+//        viewObjFragmentShader = ShaderManager.loadGLShader(this, GLES20.GL_FRAGMENT_SHADER, R.raw.texture_fragment);
+
+        textureShaderProgram = new TextureShaderProgram(this);
+
+        mViewObj = new TextureObject();
+        mViewObj.putVertexData(ModelDataManager.getTextureObjectData());
+        mViewObj.putTexture(TextureDataManager.getAvatarBorderData());
+        mViewObj.moveTo(0, 0, -5);
+//
+        mViewObj2 = new TextureObject();
+        mViewObj2.putVertexData(ModelDataManager.getTextureObjectData());
+        mViewObj2.putTexture(TextureDataManager.getAvatarBorderData());
+        mViewObj2.moveTo(0, 0, -12);
+
+//        mAvatar.bind(this);
+
         mFovBg.bind();
         mFovBg.setOnFrameAvailableListener(this);
         mFovBg.start(cardboardView.getScreenParams());
 
         GLES20.glDepthMask(true);
         // Object first appears directly in front of user.
-        Matrix.setIdentityM(modelCube, 0);
-        Matrix.translateM(modelCube, 0, 0, 0, -objectDistance);
-
-        Matrix.setIdentityM(modelFloor, 0);
-        Matrix.translateM(modelFloor, 0, 0, -floorDepth, 0); // Floor appears below user.
+//        Matrix.setIdentityM(modelCube, 0);
+//        Matrix.translateM(modelCube, 0, 0, 0, -objectDistance);
+//
+//        Matrix.setIdentityM(modelFloor, 0);
+//        Matrix.translateM(modelFloor, 0, 0, -floorDepth, 0); // Floor appears below user.
 
     }
 
@@ -364,6 +380,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
 
         headTransform.getHeadView(headView, 0);
+
+//        mAvatar.checkSelf();
 
         GlHelper.checkGlError("onReadyToDraw");
     }
@@ -397,18 +415,14 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         // Build the ModelView and ModelViewProjection matrices
         // for calculating cube position and light.
         float[] perspective = eye.getPerspective(Z_NEAR, Z_FAR);
-        Matrix.multiplyMM(modelView, 0, view, 0, modelCube, 0);
-        Matrix.multiplyMM(modelViewProjection, 0, perspective, 0, modelView, 0);
-//        drawCube();
-
-        // Set modelView for the floor, so we draw floor in the correct location
-        Matrix.multiplyMM(modelView, 0, view, 0, modelFloor, 0);
-        Matrix.multiplyMM(modelViewProjection, 0, perspective, 0,
-                modelView, 0);
 
         mFovBg.draw(perspective);
 
-        mViewObj.draw(perspective, view);
+
+        textureShaderProgram.useProgram();
+        textureShaderProgram.setTexture(TextureLoader.load(this, R.drawable.avatar_border_male));
+        mViewObj2.draw(perspective, view, textureShaderProgram);
+        mViewObj.draw(perspective, view, textureShaderProgram);
 
         updateCurrentData();
     }
@@ -428,6 +442,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
 
         GLES20.glUseProgram(cubeProgram);
+
+        GlHelper.checkGlError("Texture obj on draw");
 
         GLES20.glUniform3fv(cubeLightPosParam, 1, lightPosInEyeSpace, 0);
 

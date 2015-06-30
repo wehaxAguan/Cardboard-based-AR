@@ -18,7 +18,7 @@ public class ModelDataManager {
     /**
      * @return strip顺序的顶点数据
      */
-    public static float[] getViewObjectData() {
+    public static float[] getTextureObjectData() {
         return mViewObjSquare.clone();
     }
 }

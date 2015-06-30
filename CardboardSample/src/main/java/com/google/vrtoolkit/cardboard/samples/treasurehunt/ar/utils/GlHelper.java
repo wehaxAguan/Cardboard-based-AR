@@ -4,6 +4,8 @@ import android.hardware.Camera;
 import android.opengl.GLES20;
 import android.util.Log;
 
+import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.marker.TextureObject;
+
 import java.util.List;
 
 /**
@@ -24,6 +26,10 @@ public class GlHelper {
             Log.e(TAG, action + ": glError " + error);
             throw new RuntimeException(action + ": glError " + error);
         }
+    }
+
+    public static void checkObjShaderError(TextureObject textureObject, String action) {
+        checkGlError(action + " ready to draw");
     }
 
     public static void checkShaderError(String action, int shaderHandle) {
@@ -51,10 +57,13 @@ public class GlHelper {
 
         int program = GLES20.glCreateProgram();
         if (program != 0) {
+
             GLES20.glAttachShader(program, vertexShader);
             checkGlError("glAttachShader");
+
             GLES20.glAttachShader(program, pixelShader);
             checkGlError("glAttachShader");
+
             GLES20.glLinkProgram(program);
             int[] linkStatus = new int[1];
             GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS, linkStatus, 0);
@@ -66,7 +75,6 @@ public class GlHelper {
             }
         }
         return program;
-
     }
 
 

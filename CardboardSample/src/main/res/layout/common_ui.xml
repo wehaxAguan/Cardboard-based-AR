@@ -21,6 +21,19 @@
         android:layout_height="match_parent"
         android:text="before the view" />
 
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="70dp">
+
+        <Button
+            android:id="@+id/load_texture_btn"
+            android:text="load avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
     <com.google.vrtoolkit.cardboard.samples.treasurehunt.CardboardOverlayView
         android:id="@+id/overlay"
         android:layout_width="fill_parent"

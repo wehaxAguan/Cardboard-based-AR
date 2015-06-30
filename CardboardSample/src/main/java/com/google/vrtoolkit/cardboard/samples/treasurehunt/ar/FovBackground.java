@@ -99,6 +99,9 @@ public class FovBackground {
         if (mProgram == 0) {
             return;
         }
+
+        GLES20.glUseProgram(mProgram);
+        
         maPositionHandle = GLES20.glGetAttribLocation(mProgram, "aPosition");
         GlHelper.checkGlError("glGetAttribLocation aPosition");
         if (maPositionHandle == -1) {

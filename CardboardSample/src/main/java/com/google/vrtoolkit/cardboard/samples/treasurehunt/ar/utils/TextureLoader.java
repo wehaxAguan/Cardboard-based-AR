@@ -24,7 +24,9 @@ public class TextureLoader {
         GLES20.glGenTextures(1, textureHandle, 0);
 
         if (textureHandle[0] != 0) {
+
             final BitmapFactory.Options options = new BitmapFactory.Options();
+
             options.inScaled = false;
 
             final Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resourceId, options);
