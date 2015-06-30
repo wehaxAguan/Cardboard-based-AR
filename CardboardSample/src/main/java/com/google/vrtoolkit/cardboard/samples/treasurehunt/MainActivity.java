@@ -34,7 +34,8 @@ import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.FovBackground;
 import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.ModelDataManager;
 import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.ShaderManager;
 import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.TextureDataManager;
-import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.marker.Sprit;
+import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.marker.Avatar;
+import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.marker.Spirit;
 import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.programs.TextureShaderProgram;
 import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.utils.GlHelper;
 import com.google.vrtoolkit.cardboard.samples.treasurehunt.ar.utils.TextureLoader;
@@ -117,13 +118,13 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private float[] orthoM = new float[16];
     private int viewObjVertexShader;
     private int viewObjFragmentShader;
-    private Sprit mViewObj;
-    private Sprit mViewObj2;
+    private Spirit mViewObj;
+    private Spirit mViewObj2;
 
     private TextureShaderProgram textureShaderProgram;
     private int avatarBorder;
     private int avatar;
-//    private Avatar mAvatar;
+    private Avatar mAvatar;
 
 
     @Override
@@ -341,17 +342,19 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         textureShaderProgram = new TextureShaderProgram(this);
 
-        mViewObj = new Sprit();
-        mViewObj.putVertexData(ModelDataManager.getTextureObjectData());
+        mViewObj = new Spirit();
+        mViewObj.putVertexData(ModelDataManager.getSpiritVertexData());
         mViewObj.putTexture(TextureLoader.load(this, R.drawable.avatar_border_male), TextureDataManager.getAvatarBorderData());
-        mViewObj.moveTo(0, 0, -5);
+        mViewObj.moveTo(0, 0, -12);
 //
-        mViewObj2 = new Sprit();
-        mViewObj2.putVertexData(ModelDataManager.getTextureObjectData());
+        mViewObj2 = new Spirit();
+        mViewObj2.putVertexData(ModelDataManager.getSpiritVertexData());
         mViewObj2.putTexture(TextureLoader.load(this, R.drawable.ic_launcher), TextureDataManager.getAvatarBorderData());
-        mViewObj2.moveTo(0, 0, -12);
+        mViewObj2.moveTo(0, 0, -12.01f);
 
-//        mAvatar.bind(this);
+        mAvatar = new Avatar();
+        mAvatar.bind(this);
+        mAvatar.moveTo(0, 0, -10);
 
         mFovBg.bind();
         mFovBg.setOnFrameAvailableListener(this);
@@ -426,12 +429,14 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         textureShaderProgram.useProgram();
 //        textureShaderProgram.setTexture(avatar);
-        mViewObj2.draw(perspective, view, textureShaderProgram);
+//        mViewObj2.draw(perspective, view, textureShaderProgram);
 
 //        textureShaderProgram.setTexture(avatarBorder);
 
 //        mViewObj.
-        mViewObj.draw(perspective, view, textureShaderProgram);
+//        mViewObj.draw(perspective, view, textureShaderProgram);
+
+        mAvatar.draw(perspective, view, textureShaderProgram);
 
         updateCurrentData();
     }

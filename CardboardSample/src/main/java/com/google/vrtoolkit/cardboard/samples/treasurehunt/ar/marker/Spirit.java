@@ -12,7 +12,7 @@ import java.nio.FloatBuffer;
 /**
  * Created by mayuhan on 15/6/24.
  */
-public class Sprit {
+public class Spirit {
 
     /**
      * 绘制图形时，每个顶点xyz三分坐标
